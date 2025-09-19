@@ -4,7 +4,7 @@ import { headers } from "xmcp/headers";
 
 export const schema = {
     email: z.string().email().describe('The email address of the contact'),
-    audienceId: z.string().describe('The Audience ID where the contact will be created'),
+    audienceId: z.string().describe('The Audience ID where the contact will be created. You must have an audience ID to use this tool. If you don\'t have an audience ID, you MUST use the list-audiences tool to get all available audiences and then ask the user to select the audience they want to use.'),
     firstName: z.string().optional().describe('The first name of the contact'),
     lastName: z.string().optional().describe('The last name of the contact'),
     unsubscribed: z.boolean().optional().describe('The subscription status of the contact'),
@@ -12,7 +12,7 @@ export const schema = {
 
 export const metadata: ToolMetadata = {
     name: "create-contact",
-    description: "Create a contact inside an audience in Resend",
+    description: "Create a contact inside an audience in Resend, you must have an audience ID to use this tool. If you don't have an audience ID, you MUST use the list-audiences tool to get all available audiences and then ask the user to select the audience they want to use.",
     annotations: {
         title: "Create Contact",
         readOnlyHint: false,

@@ -1,8 +1,7 @@
 {
-  "lockfileVersion": 1,
+  "lockfileVersion": 0,
   "workspaces": {
     "": {
-      "name": "resend-mcp-remote",
       "dependencies": {
         "minimist": "^1.2.8",
         "resend": "^4.0.1",

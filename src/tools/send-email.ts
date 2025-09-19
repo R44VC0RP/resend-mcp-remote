@@ -12,7 +12,7 @@ export const schema = {
         .nonempty()
         .optional()
         .describe(
-            'Sender email address. Remember this can be in the format of `Name <email@address.com>`. You MUST ask the user for this parameter. Under no circumstance provide it yourself. If the user doesn\'t provide a sender email address, you can use `Resend MCP <onboarding@resend.dev>`',
+            'Sender email address. You MUST ask the user for this parameter. Under no circumstance provide it yourself. If the user doesn\'t provide a sender email address, you can use `onboarding@resend.dev`',
         ),
     html: z
         .string()
