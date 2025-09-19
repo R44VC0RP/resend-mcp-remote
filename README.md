@@ -38,7 +38,36 @@ resend-mcp-remote/
 |       └── send-email.ts
 ```
 
-This project uses the structured approach where tools are automatically discovered from the `src/tools` directory. 
+This project uses the structured approach where tools are automatically discovered from the `src/tools` directory.
+
+## Email Scheduling Features
+
+This MCP server includes comprehensive email scheduling capabilities:
+
+- **Basic Scheduling**: Use the `send-email` tool with the `scheduledAt` parameter
+- **Advanced Scheduling**: Use the `schedule-email-advanced` tool for more control and validation  
+- **Email Management**: List emails (including scheduled ones) with the `list-emails` tool
+
+### Scheduling Formats Supported
+
+1. **Natural Language**: "tomorrow at 10am EST", "in 2 hours", "Friday at 3pm ET"
+2. **ISO 8601 Format**: "2024-12-25T10:00:00Z"
+3. **Relative Time**: "in 30 minutes", "in 2 days"
+
+### Scheduling Examples
+
+```javascript
+// Natural language scheduling
+scheduledAt: "tomorrow at 9am PST"
+
+// ISO 8601 format  
+scheduledAt: "2024-12-25T09:00:00-08:00"
+
+// Relative time
+scheduledAt: "in 4 hours"
+```
+
+**Note**: Emails can be scheduled up to 30 days in advance.
 
 ## Tool Breakdown
 
@@ -58,19 +87,50 @@ Required Parameters (for AI):
 Required Parameters (for AI):
 - None
 
-### Send an Email
+### Send an Email (Enhanced with Scheduling)
 `send-email.ts`
 
 Required Parameters (for AI):
 - `to` (string): The recipient email address
 - `subject` (string): The email subject line
 - `text` (string): The plain text email content
+
+Optional Parameters:
 - `from` (string): The sender email address
 - `html` (string): The HTML email content
-- `replyTo` (string): The email addresses for the email readers to reply to
-- `scheduledAt` (string): The scheduled time for the email
-- `cc` (string): The CC email addresses
-- `bcc` (string): The BCC email addresses
+- `replyTo` (string[]): The email addresses for the email readers to reply to
+- `scheduledAt` (string): Schedule the email using natural language or ISO 8601 format (max 30 days ahead)
+- `cc` (string[]): The CC email addresses
+- `bcc` (string[]): The BCC email addresses
+
+### Schedule an Email (Advanced)
+`schedule-email-advanced.ts`
+
+Advanced email scheduling tool with enhanced validation and multiple scheduling options.
+
+Required Parameters (for AI):
+- `to` (string): The recipient email address
+- `subject` (string): The email subject line
+- `text` (string): The plain text email content
+- `schedulingOption` (enum): Choose from 'natural_language', 'iso_date', or 'relative_time'
+- `scheduleValue` (string): The schedule value based on the chosen option
+
+Optional Parameters:
+- `from` (string): The sender email address
+- `html` (string): The HTML email content
+- `timezone` (string): Timezone for natural language scheduling (e.g., "America/New_York")
+- `replyTo` (string[]): Reply-to email addresses
+- `cc` (string[]): CC email addresses
+- `bcc` (string[]): BCC email addresses
+
+### List Emails
+`list-emails.ts`
+
+List emails from your Resend account, including sent and scheduled emails.
+
+Optional Parameters (for AI):
+- `limit` (number): Number of emails to retrieve (1-100, default: 20)
+- `offset` (number): Number of emails to skip (for pagination)
 
 <hr>
 <br>
