@@ -4,7 +4,7 @@ This project was started with [xmcp](https://github.com/basementstudio/xmcp) (pr
 
 This is not the official Resend MCP server, the offical one is [here](https://github.com/resend/mcp-send-email).
 
-# Usage:
+# Quick Installation
 
 You can directly install this MCP server into your Cursor using this button:
 
@@ -25,6 +25,34 @@ Or you can manually install it by using this code snippet:
 }
 ```
 
+# Development Setup
+
+To set up this project for development:
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/R44VC0RP/resend-mcp-remote.git
+   cd resend-mcp-remote
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   # or
+   bun install
+   ```
+
+3. **Get your Resend API key:**
+   - Sign up at [resend.com](https://resend.com)
+   - Get your API key from the dashboard
+
+4. **Run the development server:**
+   ```bash
+   npm run dev
+   ```
+
+5. **Test your setup:**
+   The server will be available for testing with your MCP client. Make sure to include your `resend-api-key` header when making requests.
 
 # Project Structure
 
@@ -33,9 +61,9 @@ resend-mcp-remote/
 ├── src/
 │   ├── prompts/
 │   └── tools/
-|       ├── create-contact.ts
-|       ├── list-audiences.ts
-|       └── send-email.ts
+│       ├── create-contact.ts
+│       ├── list-audiences.ts
+│       └── send-email.ts
 ```
 
 This project uses the structured approach where tools are automatically discovered from the `src/tools` directory. 
@@ -48,8 +76,10 @@ This project uses the structured approach where tools are automatically discover
 Required Parameters (for AI):
 - `email` (string): The email address of the contact
 - `audienceId` (string): The audience ID where the contact will be created. You must have an audience ID to use this tool. If you don't have an audience ID, you MUST use the list-audiences tool to get all available audiences and then ask the user to select the audience they want to use.
+
+Optional Parameters:
 - `firstName` (string): The first name of the contact
-- `lastName` (string): The last name of the contact
+- `lastName` (string): The last name of the contact  
 - `unsubscribed` (boolean): The subscription status of the contact
 
 ### List All Audiences
@@ -63,14 +93,16 @@ Required Parameters (for AI):
 
 Required Parameters (for AI):
 - `to` (string): The recipient email address
-- `subject` (string): The email subject line
+- `subject` (string): The email subject line  
 - `text` (string): The plain text email content
-- `from` (string): The sender email address
-- `html` (string): The HTML email content
-- `replyTo` (string): The email addresses for the email readers to reply to
-- `scheduledAt` (string): The scheduled time for the email
-- `cc` (string): The CC email addresses
-- `bcc` (string): The BCC email addresses
+
+Optional Parameters:
+- `from` (string): The sender email address (defaults to 'Resend MCP <onboarding@resend.dev>' if not provided)
+- `html` (string): The HTML email content (only use if special formatting is needed)
+- `replyTo` (string[]): Array of email addresses for reply-to
+- `scheduledAt` (string): Natural language scheduling (e.g., 'tomorrow at 10am', 'in 2 hours')
+- `cc` (string[]): Array of CC email addresses
+- `bcc` (string[]): Array of BCC email addresses
 
 <hr>
 <br>
@@ -84,7 +116,7 @@ Required Parameters (for AI):
 Required Parameters (for AI):
 - None
 
-This is a helpful installation prompt for the AI to use to instantly install the Resend SDK for Node.js. 
+This prompt provides comprehensive setup instructions for integrating the Resend SDK into Node.js projects, including installation, basic usage, environment configuration, and TypeScript support. 
 
 # Usage
 

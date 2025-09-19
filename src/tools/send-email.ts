@@ -74,7 +74,6 @@ export default async function sendEmail({ from, to, subject, text, html, replyTo
     const { Resend } = await import('resend');
     const resend = new Resend(apiKey as string);
 
-    console.error(`Debug - Sending email with from: ${from}`);
 
     // Explicitly structure the request with all parameters to ensure they're passed correctly
     const emailRequest: {
@@ -116,7 +115,6 @@ export default async function sendEmail({ from, to, subject, text, html, replyTo
         emailRequest.bcc = bcc;
     }
 
-    console.error(`Email request: ${JSON.stringify(emailRequest)}`);
 
     const response = await resend.emails.send(emailRequest);
 
