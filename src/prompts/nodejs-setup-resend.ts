@@ -1,187 +1,124 @@
-export default function reviewCode() {
+import { type PromptMetadata } from "xmcp";
+
+export const metadata: PromptMetadata = {
+  name: "nodejs-setup-resend",
+  description: "Provides instructions for setting up the Resend SDK in a Node.js project",
+  annotations: {
+    title: "Node.js Resend Setup",
+  },
+};
+
+export default function nodeJsSetupResend() {
   return `
-# Create Contact
+# Setting up Resend in Node.js
 
-> Create a contact inside an audience.
+To get started with Resend in your Node.js project, follow these steps:
 
-## Body Parameters
+## Installation
 
-<ParamField body="email" type="string" required>
-  The email address of the contact.
-</ParamField>
+Install the Resend SDK using your preferred package manager:
 
-<ParamField path="audience_id" type="string" required>
-  The Audience ID.
-</ParamField>
+\`\`\`bash
+npm install resend
+# or
+yarn add resend  
+# or
+pnpm add resend
+# or
+bun add resend
+\`\`\`
 
-<ParamField body="first_name" type="string">
-  The first name of the contact.
-</ParamField>
+## Basic Setup
 
-<ParamField body="last_name" type="string">
-  The last name of the contact.
-</ParamField>
+1. **Get your API key:**
+   - Sign up at [resend.com](https://resend.com)
+   - Go to your dashboard and create an API key
+   - Keep this key secure and never commit it to version control
 
-<ParamField body="unsubscribed" type="boolean">
-  The subscription status.
-</ParamField>
+2. **Initialize Resend in your code:**
 
-<RequestExample>
-  \`\`\`ts Node.js
-  import { Resend } from 'resend';
+\`\`\`javascript
+import { Resend } from 'resend';
 
-  const resend = new Resend('re_xxxxxxxxx');
+const resend = new Resend('your-api-key-here');
+\`\`\`
 
-  const { data, error } = await resend.contacts.create({
-    email: 'steve.wozniak@gmail.com',
-    firstName: 'Steve',
-    lastName: 'Wozniak',
-    unsubscribed: false,
-    audienceId: '78261eea-8f8b-4381-83c6-79fa7120f1cf',
-  });
-  \`\`\`
+3. **Send your first email:**
 
-  \`\`\`php PHP
-  $resend = Resend::client('re_xxxxxxxxx');
+\`\`\`javascript
+async function sendEmail() {
+  try {
+    const { data, error } = await resend.emails.send({
+      from: 'onboarding@resend.dev',
+      to: ['user@example.com'],
+      subject: 'Hello World',
+      text: 'Welcome to Resend!'
+    });
 
-  $resend->contacts->create(
-    audienceId: '78261eea-8f8b-4381-83c6-79fa7120f1cf',
-    parameters: [
-      'email' => 'steve.wozniak@gmail.com',
-      'first_name' => 'Steve',
-      'last_name' => 'Wozniak',
-      'unsubscribed' => false
-    ]
-  );
-  \`\`\`
-
-  \`\`\`python Python
-  import resend
-
-  resend.api_key = "re_xxxxxxxxx"
-
-  params: resend.Contacts.CreateParams = {
-    "email": "steve.wozniak@gmail.com",
-    "first_name": "Steve",
-    "last_name": "Wozniak",
-    "unsubscribed": False,
-    "audience_id": "78261eea-8f8b-4381-83c6-79fa7120f1cf",
+    if (error) {
+      console.error('Error:', error);
+    } else {
+      console.log('Email sent:', data);
+    }
+  } catch (error) {
+    console.error('Failed to send email:', error);
   }
+}
 
-  resend.Contacts.create(params)
-  \`\`\`
+sendEmail();
+\`\`\`
 
-  \`\`\`ruby Ruby
-  require "resend"
+## Environment Variables
 
-  Resend.api_key = "re_xxxxxxxxx"
+For production, use environment variables to store your API key:
 
-  params = {
-    "email": "steve.wozniak@gmail.com",
-    "first_name": "Steve",
-    "last_name": "Wozniak",
-    "unsubscribed": false,
-    "audience_id": "78261eea-8f8b-4381-83c6-79fa7120f1cf",
+1. **Create a .env file:**
+\`\`\`
+RESEND_API_KEY=your-actual-api-key-here
+\`\`\`
+
+2. **Use in your code:**
+\`\`\`javascript
+import { Resend } from 'resend';
+
+const resend = new Resend(process.env.RESEND_API_KEY);
+\`\`\`
+
+## TypeScript Support
+
+Resend includes TypeScript definitions out of the box. For better type safety:
+
+\`\`\`typescript
+import { Resend } from 'resend';
+
+const resend = new Resend(process.env.RESEND_API_KEY!);
+
+interface EmailData {
+  from: string;
+  to: string[];
+  subject: string;
+  text?: string;
+  html?: string;
+}
+
+async function sendTypedEmail(emailData: EmailData) {
+  const { data, error } = await resend.emails.send(emailData);
+  
+  if (error) {
+    throw new Error(\`Failed to send email: \${JSON.stringify(error)}\`);
   }
+  
+  return data;
+}
+\`\`\`
 
-  Resend::Contacts.create(params)
-  \`\`\`
+## Next Steps
 
-  \`\`\`go Go
-  import 	"github.com/resend/resend-go/v2"
+- Explore the [Resend documentation](https://resend.com/docs) for advanced features
+- Set up domain verification for production use
+- Consider using email templates for better formatting
+- Implement proper error handling and retry logic
 
-  client := resend.NewClient("re_xxxxxxxxx")
-
-  params := &resend.CreateContactRequest{
-    Email:        "steve.wozniak@gmail.com",
-    FirstName:    "Steve",
-    LastName:     "Wozniak",
-    Unsubscribed: false,
-    AudienceId:   "78261eea-8f8b-4381-83c6-79fa7120f1cf",
-  }
-
-  contact, err := client.Contacts.Create(params)
-  \`\`\`
-
-  \`\`\`rust Rust
-  use resend_rs::{types::ContactData, Resend, Result};
-
-  #[tokio::main]
-  async fn main() -> Result<()> {
-    let resend = Resend::new("re_xxxxxxxxx");
-
-    let contact = ContactData::new("steve.wozniak@gmail.com")
-      .with_first_name("Steve")
-      .with_last_name("Wozniak")
-      .with_unsubscribed(false);
-
-    let _contact = resend
-      .contacts
-      .create("78261eea-8f8b-4381-83c6-79fa7120f1cf", contact)
-      .await?;
-
-    Ok(())
-  }
-  \`\`\`
-
-  \`\`\`java Java
-  import com.resend.*;
-
-  public class Main {
-      public static void main(String[] args) {
-          Resend resend = new Resend("re_xxxxxxxxx");
-
-          CreateContactOptions params = CreateContactOptions.builder()
-                  .email("steve.wozniak@gmail.com")
-                  .firstName("Steve")
-                  .lastName("Wozniak")
-                  .unsubscribed(false)
-                  .audienceId("78261eea-8f8b-4381-83c6-79fa7120f1cf")
-                  .build();
-
-          CreateContactResponseSuccess data = resend.contacts().create(params);
-      }
-  }
-  \`\`\`
-
-  \`\`\`csharp .NET
-  using Resend;
-
-  IResend resend = ResendClient.Create( "re_xxxxxxxxx" ); // Or from DI
-
-  var resp = await resend.ContactAddAsync(
-      new Guid( "78261eea-8f8b-4381-83c6-79fa7120f1cf" ),
-      new ContactData()
-      {
-          Email = "steve.wozniak@gmail.com",
-          FirstName = "Steve",
-          LastName = "Wozniak",
-          IsUnsubscribed = false,
-      }
-  );
-  Console.WriteLine( "Contact Id={0}", resp.Content );
-  \`\`\`
-
-  \`\`\`bash cURL
-  curl -X POST 'https://api.resend.com/audiences/78261eea-8f8b-4381-83c6-79fa7120f1cf/contacts' \
-       -H 'Authorization: Bearer re_xxxxxxxxx' \
-       -H 'Content-Type: application/json' \
-       -d $'{
-    "email": "steve.wozniak@gmail.com",
-    "first_name": "Steve",
-    "last_name": "Wozniak",
-    "unsubscribed": false
-  }'
-  \`\`\`
-</RequestExample>
-
-<ResponseExample>
-  \`\`\`json Response
-  {
-    "object": "contact",
-    "id": "479e3145-dd38-476b-932c-529ceb705947"
-  }
-  \`\`\`
-</ResponseExample>
+Happy sending! 📧
   `;
 }
