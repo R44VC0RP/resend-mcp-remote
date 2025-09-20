@@ -25,8 +25,6 @@ export default async function listAudiences() {
     const { Resend } = await import('resend');
     const resend = new Resend(apiKey as string);
 
-    console.error('Debug - Listing audiences');
-
     const response = await resend.audiences.list();
 
     if (response.error) {
