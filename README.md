@@ -2,7 +2,7 @@
 
 This project was started with [xmcp](https://github.com/basementstudio/xmcp) (probably the best way to create an MCP).
 
-This is not the official Resend MCP server, the offical one is [here](https://github.com/resend/mcp-send-email).
+This is not the official Resend MCP server, the official one is [here](https://github.com/resend/mcp-send-email).
 
 # Usage:
 
@@ -32,10 +32,11 @@ Or you can manually install it by using this code snippet:
 resend-mcp-remote/
 ├── src/
 │   ├── prompts/
+│   │   └── nodejs-setup-resend.ts
 │   └── tools/
-|       ├── create-contact.ts
-|       ├── list-audiences.ts
-|       └── send-email.ts
+│       ├── create-contact.ts
+│       ├── list-audiences.ts
+│       └── send-email.ts
 ```
 
 This project uses the structured approach where tools are automatically discovered from the `src/tools` directory. 
@@ -48,6 +49,8 @@ This project uses the structured approach where tools are automatically discover
 Required Parameters (for AI):
 - `email` (string): The email address of the contact
 - `audienceId` (string): The audience ID where the contact will be created. You must have an audience ID to use this tool. If you don't have an audience ID, you MUST use the list-audiences tool to get all available audiences and then ask the user to select the audience they want to use.
+
+Optional Parameters (for AI):
 - `firstName` (string): The first name of the contact
 - `lastName` (string): The last name of the contact
 - `unsubscribed` (boolean): The subscription status of the contact
@@ -65,12 +68,14 @@ Required Parameters (for AI):
 - `to` (string): The recipient email address
 - `subject` (string): The email subject line
 - `text` (string): The plain text email content
-- `from` (string): The sender email address
+
+Optional Parameters (for AI):
+- `from` (string): The sender email address (defaults to 'Resend MCP <onboarding@resend.dev>')
 - `html` (string): The HTML email content
-- `replyTo` (string): The email addresses for the email readers to reply to
-- `scheduledAt` (string): The scheduled time for the email
-- `cc` (string): The CC email addresses
-- `bcc` (string): The BCC email addresses
+- `replyTo` (string[]): Array of email addresses for the email readers to reply to
+- `scheduledAt` (string): The scheduled time for the email (uses natural language)
+- `cc` (string[]): Array of CC email addresses
+- `bcc` (string[]): Array of BCC email addresses
 
 <hr>
 <br>
@@ -84,7 +89,7 @@ Required Parameters (for AI):
 Required Parameters (for AI):
 - None
 
-This is a helpful installation prompt for the AI to use to instantly install the Resend SDK for Node.js. 
+This is a comprehensive setup guide prompt for the AI to use to help developers install and configure the Resend SDK for Node.js projects, including installation instructions, basic setup, examples, and best practices. 
 
 # Usage
 

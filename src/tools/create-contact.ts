@@ -32,8 +32,6 @@ export default async function createContact({ email, audienceId, firstName, last
     const { Resend } = await import('resend');
     const resend = new Resend(apiKey as string);
 
-    console.error(`Debug - Creating contact with email: ${email} in audience: ${audienceId}`);
-
     // Structure the request with all parameters
     const contactRequest: {
         email: string;
@@ -58,8 +56,6 @@ export default async function createContact({ email, audienceId, firstName, last
     if (unsubscribed !== undefined) {
         contactRequest.unsubscribed = unsubscribed;
     }
-
-    console.error(`Contact request: ${JSON.stringify(contactRequest)}`);
 
     const response = await resend.contacts.create(contactRequest);
 
